@@ -1,0 +1,25 @@
+// src/components/Map.js
+import React, { useEffect } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+function Map({ startingPoint, destination, chargingStations }) {
+    useEffect(() => {
+        const map = L.map("map").setView(startingPoint, 13);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        L.marker(startingPoint).addTo(map).bindPopup("Starting Point").openPopup();
+        L.marker(destination).addTo(map).bindPopup("Destination");
+
+        chargingStations.forEach((station) =>
+            L.marker([station.lat, station.lon]).addTo(map).bindPopup("Charging Station")
+        );
+    }, [startingPoint, destination, chargingStations]);
+
+    return <div id="map" style={{ height: "500px", width: "100%" }}></div>;
+}
+
+export default Map;
